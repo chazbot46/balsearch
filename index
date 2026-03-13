@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baloony Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <script async src="https://cse.google.com/cse.js?cx=b0e5995eae2924f85"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0f;
+      --surface: #16161a;
+      --accent: #c8f547;
+      --accent2: #7efff5;
+      --text: #f0f0f0;
+      --muted: #555;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Subtle grid bg */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,245,71,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,245,71,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* Glow blob */
+    .blob {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,245,71,0.07) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; transform: translate(-50%, -60%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -60%) scale(1.08); }
+    }
+
+    .logo-wrap {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.6rem, 6vw, 4rem);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .tagline {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .search-wrap {
+      width: 100%;
+      max-width: 680px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    /* Override Google CSE styles */
+    .gsc-control-cse {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      font-family: 'DM Sans', sans-serif !important;
+    }
+
+    .gsc-search-box {
+      margin-bottom: 0 !important;
+    }
+
+    .gsc-input-box {
+      background: var(--surface) !important;
+      border: 1px solid #2a2a2e !important;
+      border-radius: 12px 0 0 12px !important;
+      padding: 4px 12px !important;
+      transition: border-color 0.2s !important;
+    }
+
+    .gsc-input-box:focus-within {
+      border-color: var(--accent) !important;
+    }
+
+    .gsc-input {
+      background: transparent !important;
+      color: var(--text) !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 1rem !important;
+    }
+
+    input.gsc-input::placeholder {
+      color: var(--muted) !important;
+    }
+
+    .gsc-search-button {
+      background: var(--accent) !important;
+      border: none !important;
+      border-radius: 0 12px 12px 0 !important;
+      padding: 0 20px !important;
+      cursor: pointer !important;
+      transition: background 0.2s !important;
+    }
+
+    .gsc-search-button:hover {
+      background: #b8e03a !important;
+    }
+
+    .gsc-search-button-v2 svg {
+      fill: #0d0d0f !important;
+    }
+
+    /* Results */
+    .gsc-results-wrapper-overlay,
+    .gsc-results-wrapper-nooverlay {
+      background: var(--surface) !important;
+      border: 1px solid #2a2a2e !important;
+      border-radius: 12px !important;
+      margin-top: 12px !important;
+      padding: 16px !important;
+    }
+
+    .gsc-result {
+      border-bottom: 1px solid #1e1e22 !important;
+    }
+
+    .gs-title, .gs-title b {
+      color: var(--accent2) !important;
+      font-family: 'Syne', sans-serif !important;
+    }
+
+    .gs-snippet {
+      color: #aaa !important;
+      font-size: 0.88rem !important;
+    }
+
+    .gs-visibleUrl {
+      color: var(--accent) !important;
+      font-size: 0.78rem !important;
+    }
+
+    .gcsc-find-more-on-google-branding {
+      color: var(--muted) !important;
+    }
+
+    /* Pagination */
+    .gsc-cursor-box {
+      text-align: center;
+    }
+
+    .gsc-cursor-page {
+      color: var(--muted) !important;
+      background: var(--surface) !important;
+      border: 1px solid #2a2a2e !important;
+      border-radius: 6px !important;
+      padding: 4px 10px !important;
+    }
+
+    .gsc-cursor-current-page {
+      color: #0d0d0f !important;
+      background: var(--accent) !important;
+      border-color: var(--accent) !important;
+    }
+
+    footer {
+      margin-top: 48px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob"></div>
+  <div class="page">
+    <div class="logo-wrap">
+      <div class="logo">baloony<span>.</span>search</div>
+      <div class="tagline">the baloony web</div>
+    </div>
+    <div class="search-wrap">
+      <div class="gcse-search"></div>
+    </div>
+    <footer>
+      <a href="https://baloony.xyz">baloony.xyz</a> &nbsp;·&nbsp; powered by Google
+    </footer>
+  </div>
+</body>
+</html>
