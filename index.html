@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,7 +14,7 @@
 <style>
 
 :root{
---accent:#c33a3a;
+--accent:#c23a3a;
 }
 
 *{
@@ -32,33 +33,51 @@ justify-content:center;
 color:white;
 overflow:hidden;
 
-/* animated gradient */
-background: radial-gradient(circle at 30% 30%, #1a0b0b, #020408 60%);
-animation: gradientMove 12s ease-in-out infinite alternate;
+/* animated background gradient */
+
+background: radial-gradient(circle at 40% 20%, #1a0b0b, #020408 65%);
+animation: gradientMove 14s ease-in-out infinite alternate;
 }
 
 @keyframes gradientMove{
-0%{background-position:0% 50%;}
-100%{background-position:100% 50%;}
+0%{background-position:0% 40%;}
+100%{background-position:100% 60%;}
 }
 
-/* grid */
+
+/* GRID */
 
 body::before{
 content:"";
 position:fixed;
-inset:0;
+inset:-200px;
 
 background-image:
 linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
 linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
 
 background-size:60px 60px;
+
 opacity:.35;
 pointer-events:none;
+
+animation:gridDrift 40s linear infinite;
 }
 
-/* spotlight layer */
+@keyframes gridDrift{
+
+0%{
+transform:translate(0,0);
+}
+
+100%{
+transform:translate(-60px,-60px);
+}
+
+}
+
+
+/* MOUSE SPOTLIGHT */
 
 .spotlight{
 position:fixed;
@@ -67,40 +86,58 @@ pointer-events:none;
 
 background: radial-gradient(
 600px circle at var(--x) var(--y),
-rgba(255,80,80,0.15),
+rgba(255,70,70,0.15),
 transparent 60%
 );
 }
 
-/* title */
+
+/* TITLE */
 
 .title{
+
 font-size:clamp(60px,8vw,120px);
 font-weight:700;
 letter-spacing:-2px;
 margin-bottom:10px;
+
+transition:all .35s ease;
 }
 
 .title span{
 color:var(--accent);
 }
 
-/* subtitle */
+/* glow effect */
+
+.title:hover{
+
+text-shadow:
+0 0 12px rgba(200,60,60,.6),
+0 0 40px rgba(200,60,60,.3);
+
+transform:scale(1.02);
+}
+
+
+/* SUBTITLE */
 
 .subtitle{
-opacity:.5;
+opacity:.45;
 letter-spacing:4px;
 font-size:14px;
 margin-bottom:60px;
 }
 
-/* search */
+
+/* SEARCH */
 
 .search-box{
 width:min(900px,80vw);
 }
 
-/* footer */
+
+/* FOOTER */
 
 .footer{
 margin-top:60px;
@@ -109,6 +146,7 @@ font-size:14px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -116,7 +154,7 @@ font-size:14px;
 <div class="spotlight"></div>
 
 <div class="title">
-baloony<span>.</span>search
+search<span>.</span>baloony
 </div>
 
 <div class="subtitle">
@@ -128,7 +166,7 @@ THE BALOONY WEB
 </div>
 
 <div class="footer">
-baloony.xyz · powered by Google
+ powered by bal-nic
 </div>
 
 <script>
