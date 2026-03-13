@@ -6,88 +6,106 @@
 
 <title>Baloony Search</title>
 
-<!-- Google Programmable Search -->
 <script async src="https://cse.google.com/cse.js?cx=b0e5995eae2924f85"></script>
 
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
+:root{
+--accent:#c33a3a;
+}
+
 *{
-box-sizing:border-box;
 margin:0;
 padding:0;
+box-sizing:border-box;
 }
 
 body{
-font-family: "Inter", sans-serif;
-background:#0a0f1c;
-color:white;
+font-family:"Space Grotesk", sans-serif;
 height:100vh;
 display:flex;
+flex-direction:column;
 align-items:center;
 justify-content:center;
+color:white;
 overflow:hidden;
+
+/* animated gradient */
+background: radial-gradient(circle at 30% 30%, #1a0b0b, #020408 60%);
+animation: gradientMove 12s ease-in-out infinite alternate;
 }
 
-/* grid background */
+@keyframes gradientMove{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+/* grid */
 
 body::before{
 content:"";
 position:fixed;
 inset:0;
+
 background-image:
 linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
 linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-background-size:40px 40px;
-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
-z-index:-1;
+
+background-size:60px 60px;
+opacity:.35;
+pointer-events:none;
 }
 
-/* container */
+/* spotlight layer */
 
-.container{
-text-align:center;
-padding:50px 60px;
-border-radius:18px;
-background:rgba(255,255,255,0.04);
-backdrop-filter:blur(14px);
-border:1px solid rgba(255,255,255,0.08);
-box-shadow:0 15px 40px rgba(0,0,0,0.6);
-max-width:750px;
-width:90%;
+.spotlight{
+position:fixed;
+inset:0;
+pointer-events:none;
+
+background: radial-gradient(
+600px circle at var(--x) var(--y),
+rgba(255,80,80,0.15),
+transparent 60%
+);
 }
 
 /* title */
 
 .title{
-font-size:52px;
-font-weight:600;
-letter-spacing:-1px;
+font-size:clamp(60px,8vw,120px);
+font-weight:700;
+letter-spacing:-2px;
 margin-bottom:10px;
+}
+
+.title span{
+color:var(--accent);
 }
 
 /* subtitle */
 
 .subtitle{
-opacity:0.6;
-font-size:16px;
-margin-bottom:40px;
+opacity:.5;
+letter-spacing:4px;
+font-size:14px;
+margin-bottom:60px;
 }
 
-/* search box spacing */
+/* search */
 
-.gcse-search{
-width:100%;
+.search-box{
+width:min(900px,80vw);
 }
 
 /* footer */
 
 .footer{
-margin-top:40px;
-font-size:13px;
-opacity:0.5;
+margin-top:60px;
+opacity:.35;
+font-size:14px;
 }
 
 </style>
@@ -95,18 +113,36 @@ opacity:0.5;
 
 <body>
 
-<div class="container">
+<div class="spotlight"></div>
 
-<div class="title">Baloony Search</div>
-<div class="subtitle">Search the web</div>
+<div class="title">
+baloony<span>.</span>search
+</div>
 
+<div class="subtitle">
+THE BALOONY WEB
+</div>
+
+<div class="search-box">
 <div class="gcse-search"></div>
+</div>
 
 <div class="footer">
-Powered by Google Programmable Search
+baloony.xyz · powered by Google
 </div>
 
-</div>
+<script>
+
+const spotlight = document.querySelector(".spotlight");
+
+document.addEventListener("mousemove", e => {
+
+spotlight.style.setProperty("--x", e.clientX + "px");
+spotlight.style.setProperty("--y", e.clientY + "px");
+
+});
+
+</script>
 
 </body>
 </html>
