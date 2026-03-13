@@ -103,7 +103,14 @@
       animation: fadeUp 0.6s 0.1s ease both;
     }
 
-    /* Override Google CSE styles */
+    .results-wrap {
+      width: 100%;
+      max-width: 680px;
+      margin-top: 12px;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    
     .gsc-control-cse {
       background: transparent !important;
       border: none !important;
@@ -239,7 +246,10 @@
       <div class="tagline">the baloony web</div>
     </div>
     <div class="search-wrap">
-      <div class="gcse-search"></div>
+      <div class="gcse-searchbox-only" data-resultsUrl="https://search.baloony.xyz" data-queryParameterName="q"></div>
+    </div>
+    <div class="results-wrap">
+      <div class="gcse-searchresults-only" data-queryParameterName="q"></div>
     </div>
     <footer>
       <a href="https://baloony.xyz">baloony.xyz</a> &nbsp;·&nbsp; powered by Google
