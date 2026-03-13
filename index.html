@@ -1,47 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baloony Search</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Programmable Search -->
-    <script async src="https://cse.google.com/cse.js?cx=b0e5995eae2924f85"></script>
+<title>Baloony Search</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+<!-- Google Programmable Search -->
+<script async src="https://cse.google.com/cse.js?cx=b0e5995eae2924f85"></script>
 
-        .container {
-            text-align: center;
-            width: 90%;
-            max-width: 800px;
-        }
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-        h1 {
-            font-size: 40px;
-            margin-bottom: 30px;
-        }
+<style>
 
-        .gcse-search {
-            width: 100%;
-        }
-    </style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+font-family: "Inter", sans-serif;
+background:#0a0f1c;
+color:white;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+
+/* grid background */
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background-image:
+linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+background-size:40px 40px;
+mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+z-index:-1;
+}
+
+/* container */
+
+.container{
+text-align:center;
+padding:50px 60px;
+border-radius:18px;
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 15px 40px rgba(0,0,0,0.6);
+max-width:750px;
+width:90%;
+}
+
+/* title */
+
+.title{
+font-size:52px;
+font-weight:600;
+letter-spacing:-1px;
+margin-bottom:10px;
+}
+
+/* subtitle */
+
+.subtitle{
+opacity:0.6;
+font-size:16px;
+margin-bottom:40px;
+}
+
+/* search box spacing */
+
+.gcse-search{
+width:100%;
+}
+
+/* footer */
+
+.footer{
+margin-top:40px;
+font-size:13px;
+opacity:0.5;
+}
+
+</style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Baloony Search</h1>
 
-        <div class="gcse-search"></div>
-    </div>
+<div class="container">
+
+<div class="title">Baloony Search</div>
+<div class="subtitle">Search the web</div>
+
+<div class="gcse-search"></div>
+
+<div class="footer">
+Powered by Google Programmable Search
+</div>
+
+</div>
+
 </body>
 </html>
