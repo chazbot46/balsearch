@@ -1,407 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baloony Search</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baloony Search</title>
 
-    :root {
-      --bg: #0d0d0f;
-      --surface: #16161a;
-      --border: #222226;
-      --accent: #c8f547;
-      --accent2: #7efff5;
-      --text: #f0f0f0;
-      --muted: #555;
-      --muted2: #888;
-    }
+    <!-- Google Programmable Search -->
+    <script async src="https://cse.google.com/cse.js?cx=b0e5995eae2924f85"></script>
 
-    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
 
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(200,245,71,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,245,71,0.025) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none; z-index: 0;
-    }
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+        }
 
-    .blob {
-      position: fixed;
-      width: 700px; height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(200,245,71,0.06) 0%, transparent 68%);
-      top: 40%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none; z-index: 0;
-      animation: pulse 7s ease-in-out infinite;
-    }
+        h1 {
+            font-size: 40px;
+            margin-bottom: 30px;
+        }
 
-    @keyframes pulse {
-      0%,100% { transform: translate(-50%,-50%) scale(1); opacity:.8; }
-      50% { transform: translate(-50%,-50%) scale(1.1); opacity:1; }
-    }
-
-    .page {
-      position: relative; z-index: 1;
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center;
-      padding: 0 20px 60px;
-    }
-
-    .hero {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      transition: min-height 0.5s ease;
-    }
-
-    .page.has-results .hero {
-      min-height: 0;
-      padding-top: 48px;
-    }
-
-    .logo-wrap {
-      text-align: center;
-      margin-bottom: 36px;
-      animation: fadeUp 0.6s ease both;
-    }
-
-    .logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2.4rem, 7vw, 4.2rem);
-      letter-spacing: -0.03em;
-      line-height: 1;
-    }
-
-    .logo span { color: var(--accent); }
-
-    .tagline {
-      margin-top: 10px;
-      font-size: 0.78rem;
-      color: var(--muted);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-weight: 300;
-    }
-
-    .search-form {
-      width: 100%; max-width: 640px;
-      animation: fadeUp 0.6s 0.1s ease both;
-    }
-
-    .search-row {
-      display: flex;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      background: var(--surface);
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .search-row:focus-within {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(200,245,71,0.08);
-    }
-
-    .search-icon {
-      display: flex; align-items: center;
-      padding: 0 14px 0 18px;
-      color: var(--muted);
-    }
-
-    .search-icon svg { width: 18px; height: 18px; }
-
-    #search-input {
-      flex: 1;
-      background: transparent;
-      border: none; outline: none;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      padding: 14px 0;
-      caret-color: var(--accent);
-    }
-
-    #search-input::placeholder { color: var(--muted); }
-
-    .search-btn {
-      background: var(--accent);
-      border: none; cursor: pointer;
-      padding: 0 22px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.82rem;
-      letter-spacing: 0.05em;
-      color: #0d0d0f;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-
-    .search-btn:hover { background: #b8e03a; }
-
-    #results-section {
-      width: 100%; max-width: 640px;
-      margin-top: 28px;
-      display: none;
-    }
-
-    .page.has-results #results-section { display: block; }
-
-    .results-meta {
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .results-meta span { color: var(--accent); }
-
-    .result-item {
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-      animation: fadeUp 0.4s ease both;
-    }
-
-    .result-item:last-child { border-bottom: none; }
-
-    .result-url {
-      font-size: 0.72rem;
-      color: var(--muted2);
-      margin-bottom: 4px;
-      display: flex; align-items: center; gap: 6px;
-    }
-
-    .result-favicon {
-      width: 14px; height: 14px;
-      border-radius: 3px; flex-shrink: 0;
-    }
-
-    .result-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: var(--accent2);
-      text-decoration: none;
-      line-height: 1.3;
-      display: block;
-      margin-bottom: 5px;
-      transition: color 0.15s;
-    }
-
-    .result-title:hover { color: #fff; }
-
-    .result-snippet {
-      font-size: 0.875rem;
-      color: var(--muted2);
-      line-height: 1.6;
-      font-weight: 300;
-    }
-
-    .pagination {
-      display: flex; gap: 8px;
-      justify-content: center;
-      margin-top: 32px;
-      flex-wrap: wrap;
-    }
-
-    .page-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--muted2);
-      font-family: 'Syne', sans-serif;
-      font-size: 0.8rem;
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .page-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .page-btn.active { background: var(--accent); color: #0d0d0f; border-color: var(--accent); font-weight: 700; }
-
-    .state-msg {
-      text-align: center;
-      padding: 40px 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .state-msg strong {
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
-      display: block;
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-    }
-
-    .spinner {
-      width: 28px; height: 28px;
-      border: 2px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 40px auto;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    footer {
-      margin-top: 40px;
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      text-align: center;
-    }
-
-    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    footer a:hover { color: var(--accent); }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+        .gcse-search {
+            width: 100%;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="blob"></div>
-  <div class="page" id="page">
-    <div class="hero">
-      <div class="logo-wrap">
-        <div class="logo">search<span>.</span>baloony</div>
-        <div class="tagline">the baloony web</div>
-      </div>
-      <form class="search-form" onsubmit="doSearch(event)">
-        <div class="search-row">
-          <div class="search-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </div>
-          <input type="text" id="search-input" placeholder="Search the Baloony web…" autocomplete="off" autofocus>
-          <button type="submit" class="search-btn">SEARCH</button>
-        </div>
-      </form>
+    <div class="container">
+        <h1>Baloony Search</h1>
+
+        <div class="gcse-search"></div>
     </div>
-
-    <div id="results-section">
-      <div class="results-meta" id="results-meta"></div>
-      <div id="results-list"></div>
-      <div class="pagination" id="pagination"></div>
-      <footer>
-        <a href="https://nic.baloony.xyz">bal-nic</a> &nbsp;·&nbsp; powered by Google Custom Search
-      </footer>
-    </div>
-  </div>
-
-  <script>
-    const API_KEY = 'AIzaSyAXsUeTTb3Cp857ACYU0heX8HvSbDjJ7Jg';
-    const CX = 'b0e5995eae2924f85';
-
-    let currentQuery = '';
-    let currentStart = 1;
-    let totalResults = 0;
-
-    function doSearch(e) {
-      if (e) e.preventDefault();
-      const q = document.getElementById('search-input').value.trim();
-      if (!q) return;
-      currentQuery = q;
-      currentStart = 1;
-      fetchResults();
-    }
-
-    async function fetchResults() {
-      const page = document.getElementById('page');
-      const list = document.getElementById('results-list');
-      const meta = document.getElementById('results-meta');
-      const pag = document.getElementById('pagination');
-
-      page.classList.add('has-results');
-      list.innerHTML = '<div class="spinner"></div>';
-      meta.innerHTML = '';
-      pag.innerHTML = '';
-
-      const url = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CX}&q=${encodeURIComponent(currentQuery)}&start=${currentStart}`;
-
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        if (data.error) {
-          list.innerHTML = `<div class="state-msg"><strong>Error</strong>${data.error.message}</div>`;
-          return;
-        }
-
-        totalResults = parseInt(data.searchInformation?.totalResults || 0);
-        const count = data.searchInformation?.formattedTotalResults || '0';
-        const time = data.searchInformation?.formattedSearchTime || '0';
-        meta.innerHTML = `<span>${count}</span> results &nbsp;(${time}s)`;
-
-        if (!data.items || data.items.length === 0) {
-          list.innerHTML = `<div class="state-msg"><strong>No results found</strong>Try a different search term</div>`;
-          return;
-        }
-
-        list.innerHTML = '';
-        data.items.forEach((item, i) => {
-          let domain = '';
-          try { domain = new URL(item.link).hostname; } catch(e) { domain = item.displayLink || ''; }
-          const favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-
-          const wrap = document.createElement('div');
-          wrap.style.animationDelay = `${i * 0.04}s`;
-          wrap.innerHTML = `
-            <div class="result-item">
-              <div class="result-url">
-                <img class="result-favicon" src="${favicon}" alt="" onerror="this.style.display='none'">
-                ${domain}
-              </div>
-              <a class="result-title" href="${item.link}" target="_blank" rel="noopener">${item.htmlTitle || item.title}</a>
-              <div class="result-snippet">${item.htmlSnippet || item.snippet || ''}</div>
-            </div>
-          `;
-          list.appendChild(wrap);
-        });
-
-        const maxResults = Math.min(totalResults, 100);
-        const totalPages = Math.ceil(maxResults / 10);
-        const currentPage = Math.ceil(currentStart / 10);
-
-        if (totalPages > 1) {
-          for (let p = 1; p <= Math.min(totalPages, 10); p++) {
-            const btn = document.createElement('button');
-            btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
-            btn.textContent = p;
-            btn.onclick = () => {
-              currentStart = (p - 1) * 10 + 1;
-              fetchResults();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
-            pag.appendChild(btn);
-          }
-        }
-
-      } catch (err) {
-        list.innerHTML = `<div class="state-msg"><strong>Request failed</strong>Check your connection and try again</div>`;
-      }
-    }
-
-    // Support ?q= in URL
-    const params = new URLSearchParams(location.search);
-    if (params.get('q')) {
-      document.getElementById('search-input').value = params.get('q');
-      fetchResults();
-    }
-  </script>
 </body>
 </html>
